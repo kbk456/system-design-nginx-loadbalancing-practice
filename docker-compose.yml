@@ -1,0 +1,20 @@
+services:
+  backend1:
+    build: ./backend
+    environment:
+      - SERVER_NAME=backend-1
+
+  backend2:
+    build: ./backend
+    environment:
+      - SERVER_NAME=backend-2
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - backend1
+      - backend2
