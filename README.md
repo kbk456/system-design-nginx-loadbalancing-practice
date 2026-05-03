@@ -16,18 +16,22 @@
 
 ## 아키텍처 구조
 
-```
-클라이언트 (브라우저 / curl)
-        │
-        ▼
-  Nginx (포트 8080)        ← Reverse Proxy + Load Balancer
-        │
-   upstream backend_servers
-        │
-   ┌────┴────┐
-   ▼         ▼
-backend1   backend2      ← Node.js Express (포트 3000)
-(SERVER_NAME=backend-1)  (SERVER_NAME=backend-2)
+```mermaid
+flowchart TD
+    Client["🖥️ 클라이언트\n(브라우저 / curl)"]
+
+    subgraph Docker["Docker Compose Network"]
+        Nginx["⚖️ Nginx\n(포트 8080 → 80)\nReverse Proxy + Load Balancer"]
+
+        subgraph Upstream["upstream backend_servers (Round Robin)"]
+            B1["🟢 backend1\nNode.js Express\n:3000\nSERVER_NAME=backend-1"]
+            B2["🟢 backend2\nNode.js Express\n:3000\nSERVER_NAME=backend-2"]
+        end
+    end
+
+    Client -- "HTTP :8080" --> Nginx
+    Nginx -- "요청 1, 3, 5 ..." --> B1
+    Nginx -- "요청 2, 4, 6 ..." --> B2
 ```
 
 ---
