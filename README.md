@@ -67,6 +67,18 @@ for i in {1..6}; do curl -s http://localhost:8080; echo; done
 {"server":"backend-2","message":"Hello from backend-2"}
 ```
 
+### 실제 테스트 결과
+
+```bash
+$ curl -s http://localhost:8080
+{"server":"backend-2","message":"Hello from backend-2"}
+
+$ curl -s http://localhost:8080
+{"server":"backend-1","message":"Hello from backend-1"}
+```
+
+Round Robin 방식으로 backend-1과 backend-2가 번갈아 응답하는 것을 확인했다.
+
 ---
 
 ## Nginx 설정 설명
